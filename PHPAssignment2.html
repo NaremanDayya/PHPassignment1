@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>PHP Assignment2</title>
+    <style>
+        .question {
+          font-family: Arial, sans-serif;
+          font-weight: bold;
+          border: 1px solid #ccc;
+          padding: 10px;
+          margin-bottom: 10px;
+          background-color: #2596d7;
+        }
+  
+        .answer {
+          border: 1px solid #ccc;
+          padding: 10px;
+          margin-bottom: 20px;
+          background-color: #f0d1ee;
+        }
+      </style>
+  </head>
+  <body>
+    <div class="question">Q1: Write a PHP function that accepts an array of integers and return a new array after removing odd numbers</div>
+    <div class="answer">
+      <pre>
+        <?php
+        $array=[5,7,8,10,99,52,4,88];
+        $evenArray=[];
+        function oddRemove($arr)
+        {
+            foreach($arr as $key => $value)    {
+                if(($value%2 == 0))
+                $evenArray[]= $value; 
+            }
+            echo'<pre>';
+            var_dump($evenArray);
+            
+        }
+        oddRemove($array);
+    </pre>
+    </div>
+
+    <div class="question">Q2:Write a PHP function that accepts an array of strings and return the longest string found in the array,
+      the function should have a 2nd argument that will hold the index of the item that have the longest string in the input array.</div>
+    <div class="answer">
+      <pre>
+        <?php 
+        $array = ['ghyujiopwdkowhd','omar', 'ali','mohammed','samy'];
+        $longestString='';
+        $longestStringIndex=0;
+        function longest($array , $index=0)
+        {
+        $i = max(array_map('strlen',$array));  
+        foreach($array as $key => $value)
+        {
+            if($i==strlen($value)) 
+            {
+              $longestString= $value;
+              $index= $key;
+            }
+        
+        }
+          echo "your longest string is $longestString and its position in the $index index "; 
+        }
+
+        longest($array);
+
+      </pre>
+    </div>
+
+    <div class="question">Q3:Write a function that accepts 2 arrays and return a new array that holds the value of multiplying each
+      item in the first array by the corresponding item in the second array.</div>
+    <div class="answer">
+      <pre>
+        <?php
+        $arr1=[1,2,5,7,50,44];
+        $arr2= [4,5,9,10,5,2];
+        function multiplyArray($x,$y)
+        {
+        $maxArraySize= max(sizeof($x) ,sizeof($y) );
+            for($i=0; $i<$maxArraySize; $i++)
+            {
+                $diffx = isset($x[$i]) ? $x[$i] : 0 ;
+                $diffy = isset($y[$i]) ? $y[$i] : 0 ;
+                $multipliedArray[] = $diffx * $diffy;
+            }
+            echo'<pre>';
+            var_dump($multipliedArray);
+        }
+      </pre>
+    </div>
+
+    <div class="question">Q4:Write a function to calculate the factorial of a number (a non-negative integer). The function accepts
+      the number as an argument.
+    </div>
+    <div class="answer">
+      <pre>
+        <?php
+        $x=7;
+        function factorial($posnum)
+        {
+            {
+                if ($posnum < 0) {
+                    echo "Please enter a positive number, There is no factorial for negative numbers.";
+                } elseif ($posnum === 0) {
+                    return 1;
+                } else {    
+                    return $posnum * factorial($posnum - 1);
+                }
+            }
+        }
+        $y=factorial($x);
+        echo "The factorial of $x is $y";
+        
+      </pre>
+    </div>
+
+    <div class="question">Q5:Write a function to check whether a number is prime or not.
+    </div>
+    <div class="answer">
+      <pre>
+        <?php
+        $y=1;
+        function prime($x)
+        {
+            if ($x <= 1) {
+                echo "Oops, your number $x isn't a prime number";
+            } else {
+                for ($i = 2; $i <= sqrt($x); $i++) {
+                    if ($x % $i === 0) {
+                        echo "Oops, your number $x isn't a prime number";
+                        return;
+                    }
+                }
+                echo "Successfully, your number $x is a prime number";
+            }
+        }
+
+        prime($y);
+      </pre>
+    </div>
+
+      </body>
+</html>
