@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>PHP Assignment2</title>
+    <style>
+        .question {
+          font-family: Arial, sans-serif;
+          font-weight: bold;
+          border: 1px solid #ccc;
+          padding: 10px;
+          margin-bottom: 10px;
+          background-color: #2596d7;
+        }
+  
+        .answer {
+          border: 1px solid #ccc;
+          padding: 10px;
+          margin-bottom: 20px;
+          background-color: #f0d1ee;
+        }
+      </style>
+  </head>
+  <body>
+    <div class="question">1: Implement a "Student" class with the following properties:
+      ID (readonly unique identifier)
+      Name
+      Email
+      Courses (an array of "Course" objects) </div>
+    <div class="answer">
+      <pre>
+        <?php
+namespace Std;
+use Cour\Course;
+// include __DIR__ . ('\course.php');
+
+class  StudentInfo
+{
+    public readonly string $id;
+    public string $name;
+    public string $email;
+    public $courses=[];
+
+    function __construct($name,$email, $courses, $id = null)
+    {
+        $this->id =$id ??uniqid();
+        $this->name=$name; 
+        $this->email=$email;
+        foreach ($courses as $courseName) {
+            $course = new Course($courseName);
+            $this->courses[] = $course;
+        }
+
+    }
+    public function __toString()
+    {
+        $courseNames = array_map(function ($course) {
+            return $course->courseName;
+        }, $this->courses);
+
+        return "Student Info:\n"
+            . "ID: $this->id \n"
+            . "Name: $this->name \n"
+            . "Email: $this->email \n"
+            . "Courses: " . implode(', ', $courseNames) . "\n";
+    }
+    
+}
+    </pre>
+    </div>
+
+    <div class="question">class2:Implement a "Course" class with the following properties:
+      ID (readonly unique identifier)
+      Name.</div>
+    <div class="answer">
+      <pre>
+        <?php
+        namespace Cour;
+        class Course
+        {
+            public readonly string $coursID;
+            public string $courseName;
+        
+            function __construct($courseName)
+            {
+                $this->coursID =uniqid();
+                $this->courseName=$courseName; 
+            }
+        
+        }
+
+      </pre>
+    </div>
+
+    <div class="question">class3: Implement a "Manager" class that manages student objects:
+      It should include methods to: add a student, retrieve a student by ID, update student details, and delete a student.
+      The Manager class should use a trait called "Loggable" that logs any changes made to student records into a "log file"..</div>
+    <div class="answer">
+      <pre>
+        <?php
+namespace Manage;
+use Std\StudentInfo;
+use Cour\Course;
+// include __DIR__ . ('\course.php');
+include __DIR__ . ('\Loggable.php');
+
+class Manager 
+{
+   use \loggable;
+
+    public $students;
+
+    public function __construct()
+    {
+      $this->students=[];
+    }
+    
+    public function addStudent(StudentInfo $student)
+     {
+        $this->students[$student->id]=$student;
+     }
+
+     public function retrieveStudentById($id)
+     {
+        if(isset($this->students[$id]))
+        {   
+            echo $this->students[$id];
+        }
+        else
+        echo "Sorry, There is no student with id $id to retrieve its details";
+     }
+
+     public  function updateStudentDetails($id ,$newName,$newEmail, $newCourses)
+     {
+      if (isset($this->students[$id])) {
+         $student = $this->students[$id];
+         $oldName = $student->name;
+         $oldEmail = $student->email;
+         $oldCourses = $student->courses;
+
+         $student->name = $newName;
+         $student->email = $newEmail;
+         $student->courses = [];
+         foreach ($student->courses as $courseName) {
+             $course = new Course($courseName);
+             $student->courses[] = $course;
+
+         $this->logStudentUpdate($id, 'name', $oldName, $newName);
+         $this->logStudentUpdate($id, 'email', $oldEmail, $newEmail);
+         $this->logStudentUpdate($id, 'courses', $oldCourses, $newCourses);
+     }}
+      else
+      echo "there is no student with id= $id to update";
+   }
+
+   public function deleteStudent($id)
+   {
+      if(isset($this->students[$id]))
+      {
+         unset($this->students[$id]);
+      }
+      else
+      echo "Sorry, There is no student with id $id to delete";
+   }
+
+}
+      </pre>
+    </div>
+
+    <div class="question">class4: Use namespaces to organize the Student, Course and Manager classes into appropriate namespaces.
+      .
+    </div>
+    <div class="answer">
+      <pre>
+       DONE
+      </pre>
+    </div>
+
+    <div class="question">class5:Create a script to demonstrate the functionality of the Student Management System:
+      Instantiate the Manager class and perform operations like adding students, updating student details, retrieving student information, and deleting students.
+      Ensure that the "Loggable" trait captures and logs any changes made to student records.
+    </div>
+    <div class="answer">
+      <pre>
+       
+        <?php
+        trait loggable
+        {
+            private $logFile = 'students.txt';
+
+            public function log($message)
+            {
+                $logEntry = '[' . date('Y-m-d H:i:s') . '] ' . $message . PHP_EOL;
+                file_put_contents($this->logFile, $logEntry, FILE_APPEND);
+            }
+
+            public function logStudentUpdate($studentId, $property, $old, $new)
+            {
+                if ($property === 'courses') {
+                    $old = implode(', ', array_map(fn ($course) => $course->name, $old));
+                    $new = implode(', ', array_map(fn ($course) => $course->name, $new));
+                }
+                $message = "Student with ID: $studentId his $property changed from $old to $new.";
+                $this->log($message);
+            }
+
+        }
+      </pre>
+    </div>
+
+      </body>
+</html>
